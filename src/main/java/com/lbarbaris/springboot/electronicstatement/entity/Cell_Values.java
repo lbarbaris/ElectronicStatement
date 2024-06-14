@@ -14,7 +14,7 @@ public class Cell_Values {
     @JoinColumn(name = "row_id")
     private Statement_Rows statementRows;
 
-    @OneToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinColumn(name = "column_id")
     private Statement_Columns statementColumns;
 
