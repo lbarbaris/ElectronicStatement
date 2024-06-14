@@ -66,8 +66,6 @@ public class Statement_Columns {
         return "Statement_Columns{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", ColumnsSheets=" + ColumnsSheets +
-                ", ColumnsCells=" + ColumnsCells +
                 '}';
     }
 }

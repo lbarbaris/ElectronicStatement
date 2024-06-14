@@ -66,8 +66,6 @@ public class Cell_Values {
     public String toString() {
         return "Cell_Values{" +
                 "id=" + id +
-                ", statementRows=" + statementRows +
-                ", statementColumns=" + statementColumns +
                 ", value=" + value +
                 '}';
     }

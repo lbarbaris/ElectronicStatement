@@ -64,8 +64,6 @@ public class Sheets {
         return "Sheets{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", statementColumns=" + statementColumns +
-                ", statementRows=" + statementRows +
                 '}';
     }
 }

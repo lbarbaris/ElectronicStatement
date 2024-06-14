@@ -60,13 +60,12 @@ public class Statement_Rows {
         return id;
     }
 
+
     @Override
     public String toString() {
         return "Statement_Rows{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", RowsSheets=" + RowsSheets +
-                ", RowsCells=" + RowsCells +
                 '}';
     }
 }

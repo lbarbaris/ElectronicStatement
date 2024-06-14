@@ -10,7 +10,12 @@ import com.lbarbaris.springboot.electronicstatement.service.Statement_ColumnsSer
 import com.lbarbaris.springboot.electronicstatement.service.Statement_RowsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import java.util.List;
+import java.util.Map;
 
 @Controller
 public class StatementController {
@@ -29,9 +34,20 @@ public class StatementController {
 
 
 
-    @RequestMapping("/")
-    public String viewAll(){
-        Cell_Values cellValues = new Cell_Values(5);
+    @GetMapping("/")
+    public String viewAll(Model model){
+        List<Sheets> sheets = sheetsService.getAllSheets();
+        List<Statement_Columns> statementColumns = statementColumnsService.getAllColumns();
+        List<Statement_Rows> statementRows = statementRowsService.getAllRows();
+        List<Cell_Values> cellValues = cellValuesService.getAllCells();
+        model.addAllAttributes(Map.of(
+                "sheets", sheets,
+                "statementColumns", statementColumns,
+                "statementRows", statementRows,
+                "cellValues", cellValues
+        ));
+
+/*        Cell_Values cellValues = new Cell_Values(5);
         Sheets sheets = new Sheets("Maths");
         Statement_Rows statementRows = new Statement_Rows("Martynov Pavel");
         Statement_Columns statementColumns = new Statement_Columns("H/W 13.06");
@@ -46,7 +62,7 @@ public class StatementController {
         sheetsService.save(sheets);
         statementColumnsService.save(statementColumns);
         statementRowsService.save(statementRows);
-        cellValuesService.save(cellValues);
+        cellValuesService.save(cellValues);*/
         return "view";
     }
 }
