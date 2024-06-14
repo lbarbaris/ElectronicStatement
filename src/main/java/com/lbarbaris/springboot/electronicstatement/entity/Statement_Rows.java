@@ -72,4 +72,8 @@ public class Statement_Rows {
     public void setRowsCells(List<Cell_Values> rowsCells) {
         RowsCells = rowsCells;
     }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 }

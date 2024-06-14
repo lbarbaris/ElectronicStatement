@@ -11,9 +11,9 @@ import com.lbarbaris.springboot.electronicstatement.service.Statement_RowsServic
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -64,5 +64,26 @@ public class StatementController {
         statementRowsService.save(statementRows);
         cellValuesService.save(cellValues);*/
         return "view";
+    }
+
+    @GetMapping("/update")
+    public String updateRow(@RequestParam("sheetId") int id, Model model){
+        List<Statement_Rows> toSend = new ArrayList<>();
+        for (int i = 0; i < statementRowsService.getAllRows().size(); i++){
+            if (statementRowsService.getAllRows().get(i).getSheets() == sheetsService.getSheet(id)){
+                toSend.add(statementRowsService.getAllRows().get(i));
+            }
+        }
+        model.addAttribute("rows", toSend);
+        model.addAttribute("oneRow", new Statement_Rows());
+        return "updateRow";
+    }
+
+    @PostMapping("/save")
+    public String saveRow(@ModelAttribute("rows") Statement_Rows statementRows){
+        Statement_Rows updatedRows = new Statement_Rows(statementRows.getName(), statementRowsService.getRow(statementRows.getId()).getSheets(), statementRowsService.getRow(statementRows.getId()).getRowsCells());
+        updatedRows.setId(statementRows.getId());
+        statementRowsService.save(updatedRows);
+        return "redirect:/";
     }
 }

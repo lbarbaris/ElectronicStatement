@@ -38,6 +38,15 @@
         </tr>
         </c:if>
     </c:forEach>
+    <tr>
+        <td>
+            <c:url var="updateButton" value="/update">
+                <c:param name="sheetId" value="${sheet.id}"/>
+            </c:url>
+            <input type="button" value="Update"
+                   onclick="window.location.href = '${updateButton}'"/>
+        </td>
+    </tr>
     </tbody>
 </table>
     <br><br>
