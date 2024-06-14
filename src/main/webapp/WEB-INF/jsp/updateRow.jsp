@@ -18,8 +18,10 @@
 
     <form:input path="name" placeholder="Enter new name"/>
 
-    <input type="submit" value="OK">
+    <input type="submit" name="action" value="update">
+    <input type="submit" name="action" value="delete">
 </form:form>
+
 
 </body>
 </html>

@@ -18,7 +18,7 @@ public class Statement_Rows {
     @JoinColumn(name = "sheet_id")
     private Sheets sheets;
 
-    @OneToMany(mappedBy = "statementRows", cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @OneToMany(mappedBy = "statementRows", cascade = CascadeType.ALL)
     private List<Cell_Values> RowsCells;
 
     public Statement_Rows() {

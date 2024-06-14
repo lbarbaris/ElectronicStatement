@@ -48,15 +48,24 @@ public class StatementController {
         ));
 
 /*        Cell_Values cellValues = new Cell_Values(5);
-        Sheets sheets = new Sheets("Maths");
-        Statement_Rows statementRows = new Statement_Rows("Martynov Pavel");
-        Statement_Columns statementColumns = new Statement_Columns("H/W 13.06");
-        sheets.setStatementRows(statementRows);
-        sheets.setStatementColumns(statementColumns);
-        statementRows.setRowsCells(cellValues);
-        statementRows.setRowsSheets(sheets);
-        statementColumns.setColumnsCells(cellValues);
-        statementColumns.setColumnsSheets(sheets);
+        Sheets sheets = sheetsService.getSheet(3);
+        Statement_Rows statementRows = new Statement_Rows("Kostina Nastya");
+        Statement_Columns statementColumns = statementColumnsService.getColumn(3);
+        ArrayList<Statement_Rows> statementRowsArrayList = new ArrayList<Statement_Rows>();
+        statementRowsArrayList.add(statementRows);
+        sheets.setStatementRows(statementRowsArrayList);
+
+        ArrayList<Statement_Columns> statementColumnsArrayList = new ArrayList<Statement_Columns>();
+        statementColumnsArrayList.add(statementColumns);
+        sheets.setStatementColumns(statementColumnsArrayList);
+
+        ArrayList<Cell_Values> cellValuesArrayList = new ArrayList<Cell_Values>();
+        cellValuesArrayList.add(cellValues);
+        statementRows.setRowsCells(cellValuesArrayList);
+
+        statementRows.setSheets(sheets);
+        statementColumns.setColumnsCells(cellValuesArrayList);
+        statementColumns.setSheets(sheets);
         cellValues.setStatementColumns(statementColumns);
         cellValues.setStatementRows(statementRows);
         sheetsService.save(sheets);
@@ -80,10 +89,15 @@ public class StatementController {
     }
 
     @PostMapping("/save")
-    public String saveRow(@ModelAttribute("rows") Statement_Rows statementRows){
-        Statement_Rows updatedRows = new Statement_Rows(statementRows.getName(), statementRowsService.getRow(statementRows.getId()).getSheets(), statementRowsService.getRow(statementRows.getId()).getRowsCells());
-        updatedRows.setId(statementRows.getId());
-        statementRowsService.save(updatedRows);
+    public String saveOrDeleteRow(@RequestParam("action")String action, @ModelAttribute("rows") Statement_Rows statementRows){
+        if (action.equals("update")) {
+            Statement_Rows updatedRows = new Statement_Rows(statementRows.getName(), statementRowsService.getRow(statementRows.getId()).getSheets(), statementRowsService.getRow(statementRows.getId()).getRowsCells());
+            updatedRows.setId(statementRows.getId());
+            statementRowsService.save(updatedRows);
+        }
+        else{
+            statementRowsService.delete(statementRows.getId());
+        }
         return "redirect:/";
     }
 }

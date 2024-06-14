@@ -19,7 +19,7 @@ public class Statement_Columns {
     @JoinColumn(name = "sheet_id")
     private Sheets sheets;
 
-    @OneToMany(mappedBy = "statementColumns", cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @OneToMany(mappedBy = "statementColumns", cascade = CascadeType.ALL)
     private List<Cell_Values> ColumnsCells;
 
     public Statement_Columns() {
