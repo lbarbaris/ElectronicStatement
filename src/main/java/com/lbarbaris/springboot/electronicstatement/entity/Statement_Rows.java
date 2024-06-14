@@ -2,6 +2,8 @@ package com.lbarbaris.springboot.electronicstatement.entity;
 
 import jakarta.persistence.*;
 
+import java.util.List;
+
 @Entity
 public class Statement_Rows {
     @Id
@@ -12,19 +14,19 @@ public class Statement_Rows {
     @Column(name = "name")
     private String name;
 
-    @OneToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinColumn(name = "sheet_id")
-    private Sheets RowsSheets;
+    private Sheets sheets;
 
-    @OneToOne(mappedBy = "statementRows", cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
-    private Cell_Values RowsCells;
+    @OneToMany(mappedBy = "statementRows", cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    private List<Cell_Values> RowsCells;
 
     public Statement_Rows() {
     }
 
-    public Statement_Rows(String name, Sheets rowsSheets, Cell_Values rowsCells) {
+    public Statement_Rows(String name, Sheets sheets, List<Cell_Values> rowsCells) {
         this.name = name;
-        RowsSheets = rowsSheets;
+        this.sheets = sheets;
         RowsCells = rowsCells;
     }
 
@@ -40,21 +42,15 @@ public class Statement_Rows {
         this.name = name;
     }
 
-    public Sheets getRowsSheets() {
-        return RowsSheets;
+    public Sheets getSheets() {
+        return sheets;
     }
 
-    public void setRowsSheets(Sheets rowsSheets) {
-        RowsSheets = rowsSheets;
+    public void setSheets(Sheets sheets) {
+        this.sheets = sheets;
     }
 
-    public Cell_Values getRowsCells() {
-        return RowsCells;
-    }
 
-    public void setRowsCells(Cell_Values rowsCells) {
-        RowsCells = rowsCells;
-    }
 
     public int getId() {
         return id;
@@ -67,5 +63,13 @@ public class Statement_Rows {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 '}';
+    }
+
+    public List<Cell_Values> getRowsCells() {
+        return RowsCells;
+    }
+
+    public void setRowsCells(List<Cell_Values> rowsCells) {
+        RowsCells = rowsCells;
     }
 }

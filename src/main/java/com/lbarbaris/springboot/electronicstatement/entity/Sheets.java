@@ -2,6 +2,8 @@ package com.lbarbaris.springboot.electronicstatement.entity;
 
 import jakarta.persistence.*;
 
+import java.util.List;
+
 @Entity
 public class Sheets {
     @Id
@@ -12,16 +14,16 @@ public class Sheets {
     @Column(name = "name")
     private String name;
 
-    @OneToOne(mappedBy = "ColumnsSheets", cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
-    private Statement_Columns statementColumns;
+    @OneToMany(mappedBy = "sheets", cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    private List<Statement_Columns> statementColumns;
 
-    @OneToOne(mappedBy = "RowsSheets", cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
-    private Statement_Rows statementRows;
+    @OneToMany(mappedBy = "sheets", cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    private List<Statement_Rows> statementRows;
 
     public Sheets() {
     }
 
-    public Sheets(String name, Statement_Columns statementColumns, Statement_Rows statementRows) {
+    public Sheets(String name, List<Statement_Columns> statementColumns, List<Statement_Rows> statementRows) {
         this.name = name;
         this.statementColumns = statementColumns;
         this.statementRows = statementRows;
@@ -39,21 +41,15 @@ public class Sheets {
         this.name = name;
     }
 
-    public Statement_Columns getStatementColumns() {
+    public List<Statement_Columns> getStatementColumns() {
         return statementColumns;
     }
 
-    public void setStatementColumns(Statement_Columns statementColumns) {
+    public void setStatementColumns(List<Statement_Columns> statementColumns) {
         this.statementColumns = statementColumns;
     }
 
-    public Statement_Rows getStatementRows() {
-        return statementRows;
-    }
 
-    public void setStatementRows(Statement_Rows statementRows) {
-        this.statementRows = statementRows;
-    }
 
     public int getId() {
         return id;
@@ -65,5 +61,13 @@ public class Sheets {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 '}';
+    }
+
+    public List<Statement_Rows> getStatementRows() {
+        return statementRows;
+    }
+
+    public void setStatementRows(List<Statement_Rows> statementRows) {
+        this.statementRows = statementRows;
     }
 }

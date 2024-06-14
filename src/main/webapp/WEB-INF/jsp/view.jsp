@@ -13,7 +13,7 @@
     <tr>
         <th>${sheet.name}</th>
         <c:forEach var="columnName" items="${statementColumns}">
-            <c:if test="${sheet.statementColumns eq columnName}">
+            <c:if test="${columnName.sheets eq sheet}">
                 <th>${columnName.name}</th>
             </c:if>
 
@@ -23,7 +23,7 @@
     <tbody>
 
     <c:forEach var="rowName" items="${statementRows}">
-        <c:if test="${sheet.statementRows eq rowName}">
+        <c:if test="${rowName.sheets eq sheet}">
 
 
         <tr>
@@ -40,6 +40,7 @@
     </c:forEach>
     </tbody>
 </table>
+    <br><br>
 </c:forEach>
 </body>
 </html>
