@@ -7,7 +7,7 @@
 <body>
 <h2>Update Row</h2>
 
-<form:form action="save" modelAttribute="oneRow" method="post">
+<form:form action="saveRow" modelAttribute="oneRow" method="post">
 
     <!-- Dropdown list for selecting a row -->
     <form:select path="id">

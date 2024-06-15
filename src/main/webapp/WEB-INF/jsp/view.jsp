@@ -40,7 +40,7 @@
     </c:forEach>
     <tr>
         <td>
-            <c:url var="updateButton" value="/update">
+            <c:url var="updateButton" value="/updateRow">
                 <c:param name="sheetId" value="${sheet.id}"/>
             </c:url>
             <input type="button" value="Update"

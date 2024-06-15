@@ -75,20 +75,27 @@ public class StatementController {
         return "view";
     }
 
-    @GetMapping("/update")
+    @GetMapping("/updateRow")
     public String updateRow(@RequestParam("sheetId") int id, Model model){
-        List<Statement_Rows> toSend = new ArrayList<>();
-        for (int i = 0; i < statementRowsService.getAllRows().size(); i++){
-            if (statementRowsService.getAllRows().get(i).getSheets() == sheetsService.getSheet(id)){
-                toSend.add(statementRowsService.getAllRows().get(i));
-            }
+        if (sheetsService.getSheet(id).getStatementRows().size() == 0 && sheetsService.getSheet(id).getStatementColumns().size() == 0){
+            sheetsService.delete(id);
+            return "redirect:/";
         }
-        model.addAttribute("rows", toSend);
-        model.addAttribute("oneRow", new Statement_Rows());
-        return "updateRow";
+        else{
+            List<Statement_Rows> toSend = new ArrayList<>();
+            for (int i = 0; i < statementRowsService.getAllRows().size(); i++){
+                if (statementRowsService.getAllRows().get(i).getSheets() == sheetsService.getSheet(id)){
+                    toSend.add(statementRowsService.getAllRows().get(i));
+                }
+            }
+            model.addAttribute("rows", toSend);
+            model.addAttribute("oneRow", new Statement_Rows());
+            return "updateRow";
+        }
+
     }
 
-    @PostMapping("/save")
+    @PostMapping("/saveRow")
     public String saveOrDeleteRow(@RequestParam("action")String action, @ModelAttribute("rows") Statement_Rows statementRows){
         if (action.equals("update")) {
             Statement_Rows updatedRows = new Statement_Rows(statementRows.getName(), statementRowsService.getRow(statementRows.getId()).getSheets(), statementRowsService.getRow(statementRows.getId()).getRowsCells());
