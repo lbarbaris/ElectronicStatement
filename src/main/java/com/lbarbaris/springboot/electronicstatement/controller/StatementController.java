@@ -9,6 +9,7 @@ import com.lbarbaris.springboot.electronicstatement.service.SheetsService;
 import com.lbarbaris.springboot.electronicstatement.service.Statement_ColumnsService;
 import com.lbarbaris.springboot.electronicstatement.service.Statement_RowsService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -52,6 +53,7 @@ public class StatementController {
         return "view";
     }
 
+    @PreAuthorize("hasAuthority('ROLE_TEACHER')")
     @GetMapping("/updateRow")
     public String updateRow(@RequestParam("sheetId") int id, Model model){
         if (sheetsService.getSheet(id).getStatementRows().size() == 0 && sheetsService.getSheet(id).getStatementColumns().size() == 0){
@@ -72,7 +74,7 @@ public class StatementController {
         }
 
     }
-
+    @PreAuthorize("hasAuthority('ROLE_TEACHER')")
     @PostMapping("/saveRow")
     public String saveRow(@RequestParam("action")String action, @ModelAttribute("oneRow") Statement_Rows statementRows, @RequestParam("sheetId") int id){
 
@@ -108,7 +110,7 @@ public class StatementController {
         }
         return "redirect:/";
     }
-
+    @PreAuthorize("hasAuthority('ROLE_TEACHER')")
     @GetMapping("/addRow")
     public String addRow(@RequestParam("sheetId") int id, Model model){
 
@@ -118,7 +120,7 @@ public class StatementController {
         return "addRow";
     }
 
-
+    @PreAuthorize("hasAuthority('ROLE_TEACHER')")
     @GetMapping("/updateColumn")
     public String updateColumn(@RequestParam("sheetId") int id, Model model){
         if (sheetsService.getSheet(id).getStatementRows().isEmpty() && sheetsService.getSheet(id).getStatementColumns().isEmpty()){
@@ -139,7 +141,7 @@ public class StatementController {
         }
     }
 
-
+    @PreAuthorize("hasAuthority('ROLE_TEACHER')")
     @GetMapping("/addColumn")
     public String addColumn(@RequestParam("sheetId") int id, Model model){
         model.addAttribute("oneColumn", new Statement_Columns());
@@ -147,6 +149,7 @@ public class StatementController {
         return "addColumn";
     }
 
+    @PreAuthorize("hasAuthority('ROLE_TEACHER')")
     @PostMapping("/saveColumn")
     public String saveColumn(@RequestParam("action")String action, @ModelAttribute("oneColumn") Statement_Columns statementColumns, @RequestParam("sheetId") int id){
 
@@ -183,7 +186,7 @@ public class StatementController {
         return "redirect:/";
     }
 
-
+    @PreAuthorize("hasAuthority('ROLE_TEACHER')")
     @GetMapping("/updateCell")
     public String updateCell(@RequestParam("sheetId") int idSheet, @RequestParam("rowId") int idRow, Model model){
             List<Cell_Values> toSend = new ArrayList<>();
@@ -196,7 +199,7 @@ public class StatementController {
             model.addAttribute("oneCell", new Cell_Values());
             return "updateCell";
     }
-
+    @PreAuthorize("hasAuthority('ROLE_TEACHER')")
     @PostMapping("/saveCell")
     public String saveCell(@RequestParam("action")String action, @ModelAttribute("oneCell") Cell_Values cellValues){
 
@@ -207,12 +210,13 @@ public class StatementController {
         return "redirect:/";
     }
 
+    @PreAuthorize("hasAuthority('ROLE_TEACHER')")
     @GetMapping("/addSheet")
     public String addSheet(Model model){
         model.addAttribute("oneSheet", new Sheets());
         return "addSheet";
     }
-
+    @PreAuthorize("hasAuthority('ROLE_TEACHER')")
     @PostMapping("/saveSheet")
     public String saveSheet(@RequestParam("columnName")String columnName, @RequestParam("rowName")String rowName, @ModelAttribute("oneSheet") Sheets sheets){
         Cell_Values cellValues = new Cell_Values(0);
@@ -222,10 +226,6 @@ public class StatementController {
         cellValues.setStatementRows(statementRows);
         sheets.setStatementRows(new ArrayList<>(List.of(statementRows)));
         sheets.setStatementColumns(new ArrayList<>(List.of(statementColumns)));
-        System.out.println(statementRows);
-        System.out.println(statementColumns);
-        System.out.println(sheets);
-        System.out.println(cellValues);
         cellValuesService.save(cellValues);
         statementRowsService.save(statementRows);
         statementColumnsService.save(statementColumns);
