@@ -14,6 +14,7 @@ import java.util.Optional;
 
 @Service
 public class UserService implements UserDetailsService {
+    private PasswordEncoder passwordEncoder;
     @Autowired
     private UserRepository userRepository;
     @Override
@@ -22,5 +23,8 @@ public class UserService implements UserDetailsService {
         return user.map(myUserDetails::new).orElseThrow(() -> new UsernameNotFoundException(username + "not found"));
     }
 
-
+    public void addUser(User user){
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        userRepository.save(user);
+    }
 }

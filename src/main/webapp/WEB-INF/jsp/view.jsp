@@ -1,4 +1,6 @@
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
+
 
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
@@ -7,7 +9,7 @@
     <title>Таблица с именами строк и столбцов</title>
 </head>
 <body>
-
+<sec:authorize access="hasAnyRole('ROLE_TEACHER')">
 <c:url var="addSheet" value="/addSheet">
 </c:url>
 <input type="button" value="Add Sheet"
@@ -16,7 +18,7 @@
 <br>
 <br>
 <br>
-
+</sec:authorize>
 <c:forEach var="sheet" items="${sheets}">
 
 
@@ -29,7 +31,9 @@
                 <th>${columnName.name}</th>
             </c:if>
         </c:forEach>
+        <sec:authorize access="hasAnyRole('ROLE_TEACHER')">
         <th>
+
             <c:url var="updateButtonColumn" value="/updateColumn">
                 <c:param name="sheetId" value="${sheet.id}"/>
             </c:url>
@@ -40,7 +44,9 @@
             </c:url>
             <input type="button" value="Add"
                    onclick="window.location.href = '${addButtonColumn}'"/>
+
         </th>
+        </sec:authorize>
     </tr>
     </thead>
     <tbody>
@@ -58,18 +64,22 @@
                     </c:if>
                 </c:forEach>
             </c:forEach>
+            <sec:authorize access="hasAnyRole('ROLE_TEACHER')">
             <td>
             <c:url var="updateButtonCell" value="/updateCell">
                 <c:param name="sheetId" value="${sheet.id}"/>
                 <c:param name="rowId" value="${rowName.id}"/>
             </c:url>
+
             <input type="button" value="Update"
                    onclick="window.location.href = '${updateButtonCell}'"/>
             </td>
+            </sec:authorize>
         </tr>
         </c:if>
     </c:forEach>
     <tr>
+        <sec:authorize access="hasAnyRole('ROLE_TEACHER')">
         <td>
             <c:url var="updateButtonRow" value="/updateRow">
                 <c:param name="sheetId" value="${sheet.id}"/>
@@ -82,6 +92,7 @@
             <input type="button" value="Add"
                    onclick="window.location.href = '${addButtonRow}'"/>
         </td>
+        </sec:authorize>
     </tr>
     </tbody>
 </table>
