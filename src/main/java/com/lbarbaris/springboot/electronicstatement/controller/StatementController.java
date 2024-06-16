@@ -126,9 +126,7 @@ public class StatementController {
                     Cell_Values cell = new Cell_Values(statementRows, columns.get(i), 0);
                     cellValues.add(cell);
                     cellValuesService.save(cell);
-                    System.out.println(new Cell_Values(statementRows, columns.get(i), 0));
             }
-            System.out.println(cellValues);
             statementRows.setRowsCells(cellValues);
             statementRowsService.save(statementRows);
 
@@ -160,7 +158,7 @@ public class StatementController {
 
     @GetMapping("/updateColumn")
     public String updateColumn(@RequestParam("sheetId") int id, Model model){
-        if (sheetsService.getSheet(id).getStatementRows().size() == 0 && sheetsService.getSheet(id).getStatementColumns().size() == 0){
+        if (sheetsService.getSheet(id).getStatementRows().isEmpty() && sheetsService.getSheet(id).getStatementColumns().isEmpty()){
             sheetsService.delete(id);
             return "redirect:/";
         }
@@ -184,5 +182,41 @@ public class StatementController {
         model.addAttribute("oneColumn", new Statement_Columns());
         model.addAttribute("sheet", sheetsService.getSheet(id));
         return "addColumn";
+    }
+
+    @PostMapping("/saveColumn")
+    public String saveColumn(@RequestParam("action")String action, @ModelAttribute("oneColumn") Statement_Columns statementColumns, @RequestParam("sheetId") int id){
+
+        if (action.equals("update")) {
+            Statement_Columns updatedCols = new Statement_Columns(statementColumns.getName(), sheetsService.getSheet(id), statementColumnsService.getColumn(statementColumns.getId()).getColumnsCells());
+            updatedCols.setId(statementColumns.getId());
+            statementColumnsService.save(updatedCols);
+        }
+        else if (action.equals("add")){
+            statementColumns.setSheets(sheetsService.getSheet(id));
+            List<Cell_Values> cellValues = new ArrayList<Cell_Values>();
+            List<Statement_Rows> rows = sheetsService.getSheet(id).getStatementRows();
+            for (int i = 0; i < rows.size(); i++) {
+                Cell_Values cell = new Cell_Values(rows.get(i), statementColumns, 0);
+                cellValues.add(cell);
+                cellValuesService.save(cell);
+            }
+            statementColumns.setColumnsCells(cellValues);
+            statementColumnsService.save(statementColumns);
+
+        }
+        else{
+            statementColumnsService.delete(statementColumns.getId());
+            if (sheetsService.getSheet(id).getStatementColumns().isEmpty()){
+                List<Statement_Rows> toDelete = sheetsService.getSheet(id).getStatementRows();
+                for (int i = 0; i < toDelete.size(); i++){
+                    int rowid = toDelete.get(i).getId();
+                    statementRowsService.delete(rowid);
+                }
+                sheetsService.delete(id);
+            }
+
+        }
+        return "redirect:/";
     }
 }

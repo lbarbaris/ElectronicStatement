@@ -22,6 +22,10 @@ public class Statement_Columns {
     @OneToMany(mappedBy = "statementColumns", cascade = CascadeType.ALL)
     private List<Cell_Values> ColumnsCells;
 
+    public void setId(int id) {
+        this.id = id;
+    }
+
     public Statement_Columns() {
     }
 

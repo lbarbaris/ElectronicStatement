@@ -16,19 +16,19 @@
             <c:if test="${columnName.sheets eq sheet}">
                 <th>${columnName.name}</th>
             </c:if>
-                <th>
-                    <c:url var="updateButtonColumn" value="/updateColumn">
-                        <c:param name="sheetId" value="${sheet.id}"/>
-                    </c:url>
-                    <input type="button" value="Update"
-                           onclick="window.location.href = '${updateButtonColumn}'"/>
-                    <c:url var="addButtonColumn" value="/addColumn">
-                        <c:param name="sheetId" value="${sheet.id}"/>
-                    </c:url>
-                    <input type="button" value="Add"
-                           onclick="window.location.href = '${addButtonColumn}'"/>
-                </th>
         </c:forEach>
+        <th>
+            <c:url var="updateButtonColumn" value="/updateColumn">
+                <c:param name="sheetId" value="${sheet.id}"/>
+            </c:url>
+            <input type="button" value="Update"
+                   onclick="window.location.href = '${updateButtonColumn}'"/>
+            <c:url var="addButtonColumn" value="/addColumn">
+                <c:param name="sheetId" value="${sheet.id}"/>
+            </c:url>
+            <input type="button" value="Add"
+                   onclick="window.location.href = '${addButtonColumn}'"/>
+        </th>
     </tr>
     </thead>
     <tbody>
