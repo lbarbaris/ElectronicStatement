@@ -16,7 +16,18 @@
             <c:if test="${columnName.sheets eq sheet}">
                 <th>${columnName.name}</th>
             </c:if>
-
+                <th>
+                    <c:url var="updateButtonColumn" value="/updateColumn">
+                        <c:param name="sheetId" value="${sheet.id}"/>
+                    </c:url>
+                    <input type="button" value="Update"
+                           onclick="window.location.href = '${updateButtonColumn}'"/>
+                    <c:url var="addButtonColumn" value="/addColumn">
+                        <c:param name="sheetId" value="${sheet.id}"/>
+                    </c:url>
+                    <input type="button" value="Add"
+                           onclick="window.location.href = '${addButtonColumn}'"/>
+                </th>
         </c:forEach>
     </tr>
     </thead>
@@ -40,16 +51,16 @@
     </c:forEach>
     <tr>
         <td>
-            <c:url var="updateButton" value="/updateRow">
+            <c:url var="updateButtonRow" value="/updateRow">
                 <c:param name="sheetId" value="${sheet.id}"/>
             </c:url>
             <input type="button" value="Update"
-                   onclick="window.location.href = '${updateButton}'"/>
-            <c:url var="addButton" value="/addRow">
+                   onclick="window.location.href = '${updateButtonRow}'"/>
+            <c:url var="addButtonRow" value="/addRow">
                 <c:param name="sheetId" value="${sheet.id}"/>
             </c:url>
             <input type="button" value="Add"
-                   onclick="window.location.href = '${addButton}'"/>
+                   onclick="window.location.href = '${addButtonRow}'"/>
         </td>
     </tr>
     </tbody>

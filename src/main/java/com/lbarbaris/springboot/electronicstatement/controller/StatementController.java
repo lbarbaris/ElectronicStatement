@@ -120,7 +120,18 @@ public class StatementController {
         }
         else if (action.equals("add")){
             statementRows.setSheets(sheetsService.getSheet(id));
+            List<Cell_Values> cellValues = new ArrayList<Cell_Values>();
+            List<Statement_Columns> columns = sheetsService.getSheet(id).getStatementColumns();
+            for (int i = 0; i < columns.size(); i++) {
+                    Cell_Values cell = new Cell_Values(statementRows, columns.get(i), 0);
+                    cellValues.add(cell);
+                    cellValuesService.save(cell);
+                    System.out.println(new Cell_Values(statementRows, columns.get(i), 0));
+            }
+            System.out.println(cellValues);
+            statementRows.setRowsCells(cellValues);
             statementRowsService.save(statementRows);
+
         }
         else{
             statementRowsService.delete(statementRows.getId());
@@ -140,13 +151,38 @@ public class StatementController {
     @GetMapping("/addRow")
     public String addRow(@RequestParam("sheetId") int id, Model model){
 
-        List<Cell_Values> cellValues = new ArrayList<Cell_Values>();
-        for (int i = 0; i < statementColumnsService.getAllColumns().size() - 1; i++){
-            cellValues.add(new Cell_Values(0));
-        }
-        Statement_Rows statementRows = new Statement_Rows(null, sheetsService.getSheet(id), cellValues);
+        Statement_Rows statementRows = new Statement_Rows(null);
         model.addAttribute("oneRow", statementRows);
         model.addAttribute("sheet", sheetsService.getSheet(id));
         return "addRow";
+    }
+
+
+    @GetMapping("/updateColumn")
+    public String updateColumn(@RequestParam("sheetId") int id, Model model){
+        if (sheetsService.getSheet(id).getStatementRows().size() == 0 && sheetsService.getSheet(id).getStatementColumns().size() == 0){
+            sheetsService.delete(id);
+            return "redirect:/";
+        }
+        else{
+            List<Statement_Columns> toSend = new ArrayList<>();
+            for (int i = 0; i < statementColumnsService.getAllColumns().size(); i++){
+                if (statementColumnsService.getAllColumns().get(i).getSheets() == sheetsService.getSheet(id)){
+                    toSend.add(statementColumnsService.getAllColumns().get(i));
+                }
+            }
+            model.addAttribute("cols", toSend);
+            model.addAttribute("oneColumn", new Statement_Columns());
+            model.addAttribute("sheet", sheetsService.getSheet(id));
+            return "updateColumn";
+        }
+    }
+
+
+    @GetMapping("/addColumn")
+    public String addColumn(@RequestParam("sheetId") int id, Model model){
+        model.addAttribute("oneColumn", new Statement_Columns());
+        model.addAttribute("sheet", sheetsService.getSheet(id));
+        return "addColumn";
     }
 }
