@@ -7,7 +7,19 @@
     <title>Таблица с именами строк и столбцов</title>
 </head>
 <body>
+
+<c:url var="addSheet" value="/addSheet">
+</c:url>
+<input type="button" value="Add Sheet"
+       onclick="window.location.href = '${addSheet}'"/>
+
+<br>
+<br>
+<br>
+
 <c:forEach var="sheet" items="${sheets}">
+
+
 <table border="1">
     <thead>
     <tr>

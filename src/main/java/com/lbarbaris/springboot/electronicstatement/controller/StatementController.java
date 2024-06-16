@@ -14,6 +14,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -47,45 +48,7 @@ public class StatementController {
                 "cellValues", cellValues
         ));
 
-/*        Cell_Values cellValues = new Cell_Values(5);
-        Sheets sheets = new Sheets("English");
-        Statement_Columns statementColumns = new Statement_Columns("H/W 11.05");
-*//*        Sheets sheets = sheetsService.getSheet(3);*//*
-        Statement_Rows statementRows = new Statement_Rows("Kostina Nastya");
-        Statement_Rows statementRows2 = new Statement_Rows("Martynov Pavel");
-        Statement_Rows statementRows3 = new Statement_Rows("Yudintsev Ivan");
-*//*        Statement_Columns statementColumns = statementColumnsService.getColumn(3);*//*
-        ArrayList<Statement_Rows> statementRowsArrayList = new ArrayList<Statement_Rows>();
-        statementRowsArrayList.add(statementRows);
-        statementRowsArrayList.add(statementRows2);
-        statementRowsArrayList.add(statementRows3);
-        sheets.setStatementRows(statementRowsArrayList);
 
-        ArrayList<Statement_Columns> statementColumnsArrayList = new ArrayList<Statement_Columns>();
-        statementColumnsArrayList.add(statementColumns);
-        sheets.setStatementColumns(statementColumnsArrayList);
-
-        ArrayList<Cell_Values> cellValuesArrayList = new ArrayList<Cell_Values>();
-        cellValuesArrayList.add(cellValues);
-        statementRows.setRowsCells(cellValuesArrayList);
-        statementRows2.setRowsCells(cellValuesArrayList);
-        statementRows3.setRowsCells(cellValuesArrayList);
-
-        statementRows.setSheets(sheets);
-        statementRows2.setSheets(sheets);
-        statementRows3.setSheets(sheets);
-        statementColumns.setColumnsCells(cellValuesArrayList);
-        statementColumns.setSheets(sheets);
-        cellValues.setStatementColumns(statementColumns);
-        cellValues.setStatementRows(statementRows);
-        cellValues.setStatementRows(statementRows2);
-        cellValues.setStatementRows(statementRows3);
-        sheetsService.save(sheets);
-        statementColumnsService.save(statementColumns);
-        statementRowsService.save(statementRows);
-        statementRowsService.save(statementRows2);
-        statementRowsService.save(statementRows3);
-        cellValuesService.save(cellValues);*/
         return "view";
     }
 
@@ -241,6 +204,32 @@ public class StatementController {
             updatedCell.setId(cellValues.getId());
             cellValuesService.save(updatedCell);
 
+        return "redirect:/";
+    }
+
+    @GetMapping("/addSheet")
+    public String addSheet(Model model){
+        model.addAttribute("oneSheet", new Sheets());
+        return "addSheet";
+    }
+
+    @PostMapping("/saveSheet")
+    public String saveSheet(@RequestParam("columnName")String columnName, @RequestParam("rowName")String rowName, @ModelAttribute("oneSheet") Sheets sheets){
+        Cell_Values cellValues = new Cell_Values(0);
+        Statement_Rows statementRows = new Statement_Rows(rowName, sheets, new ArrayList<>(List.of(cellValues)));
+        Statement_Columns statementColumns = new Statement_Columns(columnName, sheets, new ArrayList<>(List.of(cellValues)));
+        cellValues.setStatementColumns(statementColumns);
+        cellValues.setStatementRows(statementRows);
+        sheets.setStatementRows(new ArrayList<>(List.of(statementRows)));
+        sheets.setStatementColumns(new ArrayList<>(List.of(statementColumns)));
+        System.out.println(statementRows);
+        System.out.println(statementColumns);
+        System.out.println(sheets);
+        System.out.println(cellValues);
+        cellValuesService.save(cellValues);
+        statementRowsService.save(statementRows);
+        statementColumnsService.save(statementColumns);
+        sheetsService.save(sheets);
         return "redirect:/";
     }
 }
