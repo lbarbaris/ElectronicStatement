@@ -219,4 +219,28 @@ public class StatementController {
         }
         return "redirect:/";
     }
+
+
+    @GetMapping("/updateCell")
+    public String updateCell(@RequestParam("sheetId") int idSheet, @RequestParam("rowId") int idRow, Model model){
+            List<Cell_Values> toSend = new ArrayList<>();
+            for (int i = 0; i < cellValuesService.getAllCells().size(); i++){
+                if (cellValuesService.getAllCells().get(i).getStatementRows() == statementRowsService.getRow(idRow)){
+                    toSend.add(cellValuesService.getAllCells().get(i));
+                }
+            }
+            model.addAttribute("cells", toSend);
+            model.addAttribute("oneCell", new Cell_Values());
+            return "updateCell";
+    }
+
+    @PostMapping("/saveCell")
+    public String saveCell(@RequestParam("action")String action, @ModelAttribute("oneCell") Cell_Values cellValues){
+
+            Cell_Values updatedCell = new Cell_Values(cellValuesService.getCell(cellValues.getId()).getStatementRows(), cellValuesService.getCell(cellValues.getId()).getStatementColumns(), cellValues.getValue());
+            updatedCell.setId(cellValues.getId());
+            cellValuesService.save(updatedCell);
+
+        return "redirect:/";
+    }
 }

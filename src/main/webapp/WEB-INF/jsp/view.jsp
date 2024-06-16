@@ -46,6 +46,14 @@
                     </c:if>
                 </c:forEach>
             </c:forEach>
+            <td>
+            <c:url var="updateButtonCell" value="/updateCell">
+                <c:param name="sheetId" value="${sheet.id}"/>
+                <c:param name="rowId" value="${rowName.id}"/>
+            </c:url>
+            <input type="button" value="Update"
+                   onclick="window.location.href = '${updateButtonCell}'"/>
+            </td>
         </tr>
         </c:if>
     </c:forEach>

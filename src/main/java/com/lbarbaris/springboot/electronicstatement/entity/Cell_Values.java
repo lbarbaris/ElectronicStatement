@@ -69,4 +69,8 @@ public class Cell_Values {
                 ", value=" + value +
                 '}';
     }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 }
