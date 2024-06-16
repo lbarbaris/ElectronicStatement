@@ -45,6 +45,11 @@
             </c:url>
             <input type="button" value="Update"
                    onclick="window.location.href = '${updateButton}'"/>
+            <c:url var="addButton" value="/addRow">
+                <c:param name="sheetId" value="${sheet.id}"/>
+            </c:url>
+            <input type="button" value="Add"
+                   onclick="window.location.href = '${addButton}'"/>
         </td>
     </tr>
     </tbody>
